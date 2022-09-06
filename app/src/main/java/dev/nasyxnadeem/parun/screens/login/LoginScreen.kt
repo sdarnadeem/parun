@@ -4,6 +4,7 @@ package dev.nasyxnadeem.parun.screens.login
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -11,10 +12,12 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -27,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import dev.nasyxnadeem.parun.R
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Preview
 @Composable
 fun LoginScreen(navController: NavHostController? = null) {
@@ -38,7 +42,9 @@ fun LoginScreen(navController: NavHostController? = null) {
         var mobileNumber by remember { mutableStateOf("") }
         var confirmPassword by remember {mutableStateOf("")}
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
-        var error by rememberSaveable {mutableStateOf("")}
+        var error = rememberSaveable {mutableStateOf("")}
+
+        val keyboardController = LocalSoftwareKeyboardController.current
         Image(
             painter = painterResource(R.drawable.login),
             contentDescription = null,
@@ -103,19 +109,44 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
                 label = { Text(text = "Confirm Password") },
                 onValueChange = {confirmPassword = it},
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = {
+                    keyboardController?.hide()
+                    validateInputs(email, mobileNumber, password, confirmPassword, error)
+                })
             )
         }
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "An error occured")
+        Spacer(modifier = Modifier.height(10.dp))
+
+        if (error.value.isNotEmpty()) {
+            Row(modifier = Modifier.fillMaxWidth().padding(start = 70.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
+                Text("*${error.value}", color = Color.Red)
+            }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
-        Button(onClick = {}, modifier = Modifier.fillMaxWidth(0.7f).clip(shape = RoundedCornerShape(10.dp)), colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff0124fb))) {
-            Text("Continue")
+        Button(onClick = {
+                         validateInputs(email, mobileNumber, password, confirmPassword, error);
+        }, modifier = Modifier.fillMaxWidth(0.7f).clip(shape = RoundedCornerShape(10.dp)), colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff0124fb))) {
+            Text("Continue", color = Color.LightGray)
         }
 
     }
+}
+
+fun validateInputs(email: String, mobileNumber: String, password: String, confirmPassword: String, error: MutableState<String>) {
+        if (email.isNullOrEmpty()) {
+            error.value = "Please Enter an Email"
+        } else if (mobileNumber.isNullOrEmpty()) {
+            error.value = "Please Enter a mobile Number"
+        } else if (password.isNullOrEmpty()) {
+            error.value = "Please enter a password"
+        } else if (password.length < 8) {
+            error.value = "Please enter a password containing at least 8 characters"
+        } else if (password != confirmPassword) {
+            error.value = "Password and confirm password must be same"
+        } else {
+            error.value = ""
+        }
 }
 
