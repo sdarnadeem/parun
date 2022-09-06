@@ -3,6 +3,8 @@ package dev.nasyxnadeem.parun.screens.login
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -18,8 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,7 +36,7 @@ import dev.nasyxnadeem.parun.R
 fun LoginScreen(navController: NavHostController? = null) {
 
 
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = Modifier.fillMaxSize().padding(top = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         var email by remember{ mutableStateOf("")}
         var password by remember{mutableStateOf("")}
         var mobileNumber by remember { mutableStateOf("") }
@@ -39,10 +44,10 @@ fun LoginScreen(navController: NavHostController? = null) {
         Image(
             painter = painterResource(R.drawable.login),
             contentDescription = null,
-            modifier = Modifier.fillMaxHeight(0.3f)
+            modifier = Modifier.fillMaxHeight(0.3f).fillMaxWidth(), contentScale = ContentScale.FillWidth
         )
 
-Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 50.dp, vertical = 20.dp ), horizontalArrangement = Arrangement.Start) {
+Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 20.dp ), horizontalArrangement = Arrangement.Start) {
     Text(text = "Signup", color = Color.Black, fontSize = 30.sp, fontWeight = FontWeight.Bold)
 
 }
@@ -53,7 +58,8 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 50.dp, vertical = 20
                 value = email,
                 label = { Text(text = "Email Address") },
                 onValueChange = {email = it},
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
             )
         }
 
@@ -64,7 +70,8 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 50.dp, vertical = 20
                 value = mobileNumber,
                 label = { Text(text = "Mobile Number") },
                 onValueChange = {mobileNumber = it},
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next),
             )
         }
 
@@ -78,7 +85,8 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 50.dp, vertical = 20
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 trailingIcon = {
                     Icon(imageVector = Icons.Default.Visibility, contentDescription = null)
-                }
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
             )
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
