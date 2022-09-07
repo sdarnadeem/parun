@@ -27,13 +27,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import dev.nasyxnadeem.parun.R
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Preview
 @Composable
-fun LoginScreen(navController: NavHostController? = null) {
+fun SignupScreen(navController: NavHostController? = null, viewModel: SignupViewModel = hiltViewModel()) {
 
 
     Column(modifier = Modifier.fillMaxSize().padding(top = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -112,7 +113,7 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
                     keyboardController?.hide()
-                    validateInputs(email, mobileNumber, password, confirmPassword, error)
+                    validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel)
                 })
             )
         }
@@ -126,7 +127,7 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
         }
 
         Button(onClick = {
-                         validateInputs(email, mobileNumber, password, confirmPassword, error)
+                         validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel)
         }, modifier = Modifier.fillMaxWidth(0.7f).clip(shape = RoundedCornerShape(10.dp)), colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff0124fb))) {
             Text("Continue", color = Color.LightGray)
         }
@@ -143,7 +144,7 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
     }
 }
 
-fun validateInputs(email: String, mobileNumber: String, password: String, confirmPassword: String, error: MutableState<String>) {
+fun validateInputs(email: String, mobileNumber: String, password: String, confirmPassword: String, error: MutableState<String>, viewModel: SignupViewModel) {
         if (email.isEmpty()) {
             error.value = "Please Enter an Email"
         } else if (mobileNumber.isEmpty()) {
