@@ -29,7 +29,7 @@ fun SplashScreen(navController: NavController) {
 
     // animate to red
     LaunchedEffect(true) {
-        color.animateTo(Color.Green, animationSpec = tween(2000))
+        color.animateTo(Color.Magenta, animationSpec = tween(2000))
         navController.navigate(ParunScreens.LoginScreen.name)
     }
 
@@ -55,7 +55,7 @@ fun SplashScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text("PARUN", style = primaryTextStyle)
-            Text("Make your move now", style = secondaryTextStyle)
+            Text("Make your move now", style = secondaryTextStyle,)
         }
     }
 }

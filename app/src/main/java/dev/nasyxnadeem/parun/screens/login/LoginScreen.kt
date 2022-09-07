@@ -42,7 +42,7 @@ fun LoginScreen(navController: NavHostController? = null) {
         var mobileNumber by remember { mutableStateOf("") }
         var confirmPassword by remember {mutableStateOf("")}
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
-        var error = rememberSaveable {mutableStateOf("")}
+        val error = rememberSaveable {mutableStateOf("")}
 
         val keyboardController = LocalSoftwareKeyboardController.current
         Image(
@@ -126,20 +126,29 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
         }
 
         Button(onClick = {
-                         validateInputs(email, mobileNumber, password, confirmPassword, error);
+                         validateInputs(email, mobileNumber, password, confirmPassword, error)
         }, modifier = Modifier.fillMaxWidth(0.7f).clip(shape = RoundedCornerShape(10.dp)), colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff0124fb))) {
             Text("Continue", color = Color.LightGray)
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(top = 10.dp)
+        ) {
+            Text("Already have an account, ", style = MaterialTheme.typography.subtitle1)
+            TextButton(onClick = {}) {
+                Text("Sign In", style = MaterialTheme.typography.subtitle1)
+            }
         }
 
     }
 }
 
 fun validateInputs(email: String, mobileNumber: String, password: String, confirmPassword: String, error: MutableState<String>) {
-        if (email.isNullOrEmpty()) {
+        if (email.isEmpty()) {
             error.value = "Please Enter an Email"
-        } else if (mobileNumber.isNullOrEmpty()) {
+        } else if (mobileNumber.isEmpty()) {
             error.value = "Please Enter a mobile Number"
-        } else if (password.isNullOrEmpty()) {
+        } else if (password.isEmpty()) {
             error.value = "Please enter a password"
         } else if (password.length < 8) {
             error.value = "Please enter a password containing at least 8 characters"
