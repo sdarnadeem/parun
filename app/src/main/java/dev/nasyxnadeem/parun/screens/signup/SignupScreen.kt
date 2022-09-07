@@ -1,4 +1,4 @@
-package dev.nasyxnadeem.parun.screens.login
+package dev.nasyxnadeem.parun.screens.signup
 
 
 import androidx.compose.foundation.Image

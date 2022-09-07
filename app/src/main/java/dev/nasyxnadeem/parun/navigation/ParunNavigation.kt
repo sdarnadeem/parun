@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import dev.nasyxnadeem.parun.screens.login.LoginScreen
+import dev.nasyxnadeem.parun.screens.signup.LoginScreen
 import dev.nasyxnadeem.parun.screens.splash.SplashScreen
 
 @Composable
