@@ -11,6 +11,6 @@ import javax.inject.Singleton
 interface BackendAPI {
 
     @POST("auth/signup")
-    suspend fun signupUser(@Body signupData: SignupData): SignupResponse?
+    suspend fun signupUser(@Body signupData: SignupData): SignupResponse
 
 }

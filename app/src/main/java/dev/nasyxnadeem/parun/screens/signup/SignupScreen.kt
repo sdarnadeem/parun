@@ -31,7 +31,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import dev.nasyxnadeem.parun.R
 import dev.nasyxnadeem.parun.model.SignupData
-import kotlin.math.sign
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Preview
@@ -48,8 +47,8 @@ fun SignupScreen(navController: NavHostController? = null, viewModel: SignupView
         val error= rememberSaveable {mutableStateOf("")}
         val loading = remember { mutableStateOf(false) }
 
-        println(viewModel.data)
 
+        println("SIGNUP SCREEN LOADING" + viewModel.data.value.loading)
         val keyboardController = LocalSoftwareKeyboardController.current
         Image(
             painter = painterResource(R.drawable.login),
@@ -168,10 +167,10 @@ fun validateInputs(email: String, mobileNumber: String, password: String, confir
 //        } else {
             error.value = ""
             viewModel.signupUser(signupData = SignupData(email, mobileNumber, password, confirmPassword))
-            if (!viewModel.data.value?.data?.message.isNullOrEmpty()) {
-                error.value = viewModel.data.value?.data?.message.toString()
+            if (!viewModel.data.value.data?.message.isNullOrEmpty()) {
+                error.value = viewModel.data.value.data?.message.toString()
             }
-        loading.value = viewModel.data.value?.loading!!
+        loading.value = viewModel.data.value.loading!!
 //        }
 
 

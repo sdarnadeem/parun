@@ -1,7 +1,6 @@
 package dev.nasyxnadeem.parun.repository
 
 import dev.nasyxnadeem.parun.data.DataOrException
-import dev.nasyxnadeem.parun.data.Resource
 import dev.nasyxnadeem.parun.model.SignupData
 import dev.nasyxnadeem.parun.model.SignupResponse
 import dev.nasyxnadeem.parun.network.BackendAPI
@@ -17,17 +16,5 @@ class BackendRepo  @Inject constructor(private val api: BackendAPI){
             DataOrException(null, false, e)
         }
     }
-//        return try {
-//            Resource.Loading(data = true)
-//
-//            val response = api.signupUser(signupData)
-//
-//
-//
-//            Resource.Success(data = response)
-//        } catch (e: Exception) {
-//            Resource.Loading(false)
-//            Resource.Error(message = e.message.toString())
-//        }
-//    }
+
 }

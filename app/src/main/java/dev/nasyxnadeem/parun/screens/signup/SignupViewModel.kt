@@ -2,7 +2,6 @@ package dev.nasyxnadeem.parun.screens.signup
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,9 +28,17 @@ class SignupViewModel @Inject constructor(
 
     fun signupUser(signupData: SignupData) {
         viewModelScope.launch {
-            data.value?.loading = true
-            data.value?.data = repo.signup(signupData).data
-            data.value?.loading = false
+            println("LOADING 1 "+data.value.loading)
+            data.value.loading = true
+            println("LOADING 2 "+data.value.loading)
+
+            data.value.data = repo.signup(signupData).data
+            println("LOADING 3 "+data.value.loading)
+            println("VIEW MODEL DATA " + data.value.data)
+
+            data.value.loading = false
+            println("LOADING 4 "+data.value.loading)
+
 
         }
     }
