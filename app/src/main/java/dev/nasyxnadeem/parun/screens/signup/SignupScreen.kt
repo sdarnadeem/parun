@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import dev.nasyxnadeem.parun.R
+import dev.nasyxnadeem.parun.model.SignupData
+import kotlin.math.sign
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Preview
@@ -43,7 +45,10 @@ fun SignupScreen(navController: NavHostController? = null, viewModel: SignupView
         var mobileNumber by remember { mutableStateOf("") }
         var confirmPassword by remember {mutableStateOf("")}
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
-        val error = rememberSaveable {mutableStateOf("")}
+        val error= rememberSaveable {mutableStateOf("")}
+        val loading = remember { mutableStateOf(false) }
+
+        println(viewModel.data)
 
         val keyboardController = LocalSoftwareKeyboardController.current
         Image(
@@ -113,23 +118,27 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
                     keyboardController?.hide()
-                    validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel)
+                    validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel, loading)
                 })
             )
         }
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        if (error.value.isNotEmpty()) {
+        if (!error.value.isNullOrEmpty()) {
             Row(modifier = Modifier.fillMaxWidth().padding(start = 70.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
                 Text("*${error.value}", color = Color.Red)
             }
         }
 
-        Button(onClick = {
-                         validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel)
-        }, modifier = Modifier.fillMaxWidth(0.7f).clip(shape = RoundedCornerShape(10.dp)), colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff0124fb))) {
-            Text("Continue", color = Color.LightGray)
+        if (!loading.value) {
+            Button(onClick = {
+                validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel, loading)
+            }, modifier = Modifier.fillMaxWidth(0.7f).clip(shape = RoundedCornerShape(10.dp)), colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff0124fb))) {
+                Text("Continue", color = Color.LightGray)
+            }
+        } else {
+            CircularProgressIndicator()
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -144,19 +153,27 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
     }
 }
 
-fun validateInputs(email: String, mobileNumber: String, password: String, confirmPassword: String, error: MutableState<String>, viewModel: SignupViewModel) {
-        if (email.isEmpty()) {
-            error.value = "Please Enter an Email"
-        } else if (mobileNumber.isEmpty()) {
-            error.value = "Please Enter a mobile Number"
-        } else if (password.isEmpty()) {
-            error.value = "Please enter a password"
-        } else if (password.length < 8) {
-            error.value = "Please enter a password containing at least 8 characters"
-        } else if (password != confirmPassword) {
-            error.value = "Password and confirm password must be same"
-        } else {
+
+fun validateInputs(email: String, mobileNumber: String, password: String, confirmPassword: String, error: MutableState<String>, viewModel: SignupViewModel, loading: MutableState<Boolean>) {
+//        if (email.isEmpty()) {
+//            error.value = "Please Enter an Email"
+//        } else if (mobileNumber.isEmpty()) {
+//            error.value = "Please Enter a mobile Number"
+//        } else if (password.isEmpty()) {
+//            error.value = "Please enter a password"
+//        } else if (password.length < 8) {
+//            error.value = "Please enter a password containing at least 8 characters"
+//        } else if (password != confirmPassword) {
+//            error.value = "Password and confirm password must be same"
+//        } else {
             error.value = ""
-        }
+            viewModel.signupUser(signupData = SignupData(email, mobileNumber, password, confirmPassword))
+            if (!viewModel.data.value?.data?.message.isNullOrEmpty()) {
+                error.value = viewModel.data.value?.data?.message.toString()
+            }
+        loading.value = viewModel.data.value?.loading!!
+//        }
+
+
 }
 

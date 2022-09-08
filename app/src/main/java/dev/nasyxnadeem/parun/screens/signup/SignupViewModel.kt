@@ -2,6 +2,7 @@ package dev.nasyxnadeem.parun.screens.signup
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,21 +19,20 @@ class SignupViewModel @Inject constructor(
 ) : ViewModel() {
 
     val data: MutableState<DataOrException<SignupResponse, Boolean, Exception>> = mutableStateOf(
-        DataOrException(SignupResponse(), true, Exception())
+        DataOrException(SignupResponse(), false, Exception())
     )
+//    var data: MutableLiveData<DataOrException<SignupResponse, Boolean, Exception>> = MutableLiveData()
 
 //    val data: MutableState<Resource> = mutableStateOf(Resource.Success(data = SignupResponse()))
 
 
 
-    private fun signupUser(signupData: SignupData) {
+    fun signupUser(signupData: SignupData) {
         viewModelScope.launch {
-            data.value.loading = true
-            data.value.data = repo.signup(signupData).data
+            data.value?.loading = true
+            data.value?.data = repo.signup(signupData).data
+            data.value?.loading = false
 
-            if (data.value.data == null) {
-                data.value.loading = false
-            }
         }
     }
 }

@@ -1,8 +1,8 @@
 package dev.nasyxnadeem.parun.model
 
 data class SignupResponse(
-    private val token : String? = null,
-    private val status: String? = null,
-    private val message: String? = null,
-    private val data: User? = null
+     val token : String? = null,
+     val status: String? = null,
+     val message: String? = null,
+    val data: User? = null
 )
