@@ -45,10 +45,10 @@ fun SignupScreen(navController: NavHostController? = null, viewModel: SignupView
         var confirmPassword by remember {mutableStateOf("")}
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
         val error= rememberSaveable {mutableStateOf("")}
-        val loading = remember { mutableStateOf(false) }
+//        val loading = remember { mutableStateOf(false) }
 
 
-        println("SIGNUP SCREEN LOADING" + viewModel.data.value.loading)
+//        println("SIGNUP SCREEN LOADING" + viewModel.data.value.loading)
         val keyboardController = LocalSoftwareKeyboardController.current
         Image(
             painter = painterResource(R.drawable.login),
@@ -117,7 +117,7 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
                     keyboardController?.hide()
-                    validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel, loading)
+                    validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel)
                 })
             )
         }
@@ -130,9 +130,9 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
             }
         }
 
-        if (!loading.value) {
+        if (!viewModel.loading.value) {
             Button(onClick = {
-                validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel, loading)
+                validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel)
             }, modifier = Modifier.fillMaxWidth(0.7f).clip(shape = RoundedCornerShape(10.dp)), colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff0124fb))) {
                 Text("Continue", color = Color.LightGray)
             }
@@ -153,7 +153,7 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
 }
 
 
-fun validateInputs(email: String, mobileNumber: String, password: String, confirmPassword: String, error: MutableState<String>, viewModel: SignupViewModel, loading: MutableState<Boolean>) {
+fun validateInputs(email: String, mobileNumber: String, password: String, confirmPassword: String, error: MutableState<String>, viewModel: SignupViewModel) {
 //        if (email.isEmpty()) {
 //            error.value = "Please Enter an Email"
 //        } else if (mobileNumber.isEmpty()) {
@@ -167,10 +167,9 @@ fun validateInputs(email: String, mobileNumber: String, password: String, confir
 //        } else {
             error.value = ""
             viewModel.signupUser(signupData = SignupData(email, mobileNumber, password, confirmPassword))
-            if (!viewModel.data.value.data?.message.isNullOrEmpty()) {
-                error.value = viewModel.data.value.data?.message.toString()
+            if (!viewModel.response.value?.message.isNullOrEmpty()) {
+                error.value = viewModel.response.value?.message.toString()
             }
-        loading.value = viewModel.data.value.loading!!
 //        }
 
 
