@@ -11,7 +11,9 @@ class BackendRepo  @Inject constructor(private val api: BackendAPI){
     suspend fun signup(signupData: SignupData) : DataOrException<SignupResponse, Boolean,Exception> {
         return try {
             val response = api.signupUser(signupData)
-            DataOrException(response, false, null)
+            println("RESPONSE $response")
+
+            DataOrException(response.body(), false, null)
         }catch (e: Exception) {
             DataOrException(null, false, e)
         }

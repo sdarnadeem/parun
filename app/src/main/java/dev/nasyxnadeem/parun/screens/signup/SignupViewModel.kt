@@ -38,7 +38,8 @@ class SignupViewModel @Inject constructor(
 //            println("LOADING 3 "+data.value.loading)
 //            println("VIEW MODEL DATA " + data.value.data)
             response.value = repo.signup(signupData).data
-            println("RESPONSE VALUE" + response.value)
+//            println("RESPONSE VALUE" + repo.signup(signupData))
+//            println("RESPONSE EXCEPTION" + repo.signup(signupData).e?.message.toString())
 
 //            data.value.loading = false
             loading.value = false
