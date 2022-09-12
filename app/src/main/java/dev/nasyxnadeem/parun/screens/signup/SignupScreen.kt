@@ -44,7 +44,7 @@ fun SignupScreen(navController: NavHostController? = null, viewModel: SignupView
         var mobileNumber by remember { mutableStateOf("") }
         var confirmPassword by remember {mutableStateOf("")}
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
-        val error= rememberSaveable {mutableStateOf("")}
+        val error: MutableState<String?> = rememberSaveable {mutableStateOf(null)}
 //        val loading = remember { mutableStateOf(false) }
 
 
@@ -153,24 +153,29 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
 }
 
 
-fun validateInputs(email: String, mobileNumber: String, password: String, confirmPassword: String, error: MutableState<String>, viewModel: SignupViewModel) {
-//        if (email.isEmpty()) {
-//            error.value = "Please Enter an Email"
-//        } else if (mobileNumber.isEmpty()) {
-//            error.value = "Please Enter a mobile Number"
-//        } else if (password.isEmpty()) {
-//            error.value = "Please enter a password"
-//        } else if (password.length < 8) {
-//            error.value = "Please enter a password containing at least 8 characters"
-//        } else if (password != confirmPassword) {
-//            error.value = "Password and confirm password must be same"
-//        } else {
-            error.value = ""
+fun validateInputs(email: String, mobileNumber: String, password: String, confirmPassword: String, error: MutableState<String?>, viewModel: SignupViewModel) {
+error.value = null
+if (email.isEmpty()) {
+error.value = "Please Enter an Email"
+} else if (mobileNumber.isEmpty()) {
+error.value = "Please Enter a mobile Number"
+} else if (password.isEmpty()) {
+error.value = "Please enter a password"
+} else if (password.length < 8) {
+error.value = "Please enter a password containing at least 8 characters"
+} else if (password != confirmPassword) {
+error.value = "Password and confirm password must be same"
+} else {
+
             viewModel.signupUser(signupData = SignupData(email, mobileNumber, password, confirmPassword))
-            if (!viewModel.response.value?.message.isNullOrEmpty()) {
-                error.value = viewModel.response.value?.message.toString()
+            if (!viewModel.data.value?.message.toString().isNullOrEmpty()) {
+                error.value = viewModel.data.value?.message.toString()
             }
-//        }
+            if (!viewModel.exception.value.message.isNullOrEmpty()) {
+                error.value = viewModel.exception.value.message.toString()
+            }
+
+        }
 
 
 }

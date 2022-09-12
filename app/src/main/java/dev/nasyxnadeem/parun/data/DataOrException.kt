@@ -1,7 +1,14 @@
 package dev.nasyxnadeem.parun.data
 
-data class DataOrException<T, Boolean, E:Exception>(
-    var data: T? = null,
-    var loading: Boolean? = null,
-    var e: E? = null
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+
+
+
+data class DataOrException<T, Boolean, E: Exception>(
+    val data: MutableState<T?> = mutableStateOf(null),
+    val loading: MutableState<Boolean?> = mutableStateOf(null),
+    val e : MutableState<E?> = mutableStateOf(null),
+    val message: MutableState<String?> = mutableStateOf(null)
+
 )

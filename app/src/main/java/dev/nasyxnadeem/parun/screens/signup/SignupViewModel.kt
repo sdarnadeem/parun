@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.nasyxnadeem.parun.data.DataOrException
 import dev.nasyxnadeem.parun.model.SignupData
 import dev.nasyxnadeem.parun.model.SignupResponse
 import dev.nasyxnadeem.parun.repository.BackendRepo
@@ -17,33 +16,33 @@ class SignupViewModel @Inject constructor(
     private val repo: BackendRepo
 ) : ViewModel() {
 
-//    val data: MutableState<DataOrException<SignupResponse, Boolean, Exception>> = mutableStateOf(
-//        DataOrException(SignupResponse(), false, Exception())
-//    )
-//    var data: MutableLiveData<DataOrException<SignupResponse, Boolean, Exception>> = MutableLiveData()
 
-//    val data: MutableState<Resource> = mutableStateOf(Resource.Success(data = SignupResponse()))
-    var loading = mutableStateOf(false)
-    var response: MutableState<SignupResponse?> = mutableStateOf(SignupResponse())
-    var exception = mutableStateOf(Exception())
+
+    val loading = mutableStateOf(false)
+    val data: MutableState<SignupResponse?> = mutableStateOf(SignupResponse())
+    val exception = mutableStateOf(Exception())
 
     fun signupUser(signupData: SignupData) {
         viewModelScope.launch {
-//            println("LOADING 1 "+data.value.loading)
-//            data.value.loading = true
-            loading.value = true
-//            println("LOADING 2 "+data.value.loading)
 
-//            data.value.data = repo.signup(signupData).data
-//            println("LOADING 3 "+data.value.loading)
-//            println("VIEW MODEL DATA " + data.value.data)
-            response.value = repo.signup(signupData).data
-//            println("RESPONSE VALUE" + repo.signup(signupData))
-//            println("RESPONSE EXCEPTION" + repo.signup(signupData).e?.message.toString())
-
-//            data.value.loading = false
-            loading.value = false
-//            println("LOADING 4 "+data.value.loading)
+            try {
+                loading.value = true
+                val response = repo.signup(signupData)
+                data.value = response.body()
+                println("RESPONSE111 ${response.message()}")
+                println("RESPONSE112 ${response.raw()}")
+                println("RESPONSE113 ${response.body()}")
+                println("RESPONSE114 ${response.code()}")
+                println("RESPONSE115 ${response.errorBody()}")
+                println("RESPONSE116 ${response.headers()}")
+                if (response.code() == 409) throw Exception("Email Id or Phone Number already Exists")
+                exception.value = Exception()
+            } catch (e: Exception) {
+                exception.value = e
+                println("EXCEPTION ${e.message}")
+            } finally {
+                loading.value = false
+            }
 
 
         }

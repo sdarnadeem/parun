@@ -1,5 +1,7 @@
 package dev.nasyxnadeem.parun.network
 
+import dev.nasyxnadeem.parun.model.SigninData
+import dev.nasyxnadeem.parun.model.SigninResponse
 import dev.nasyxnadeem.parun.model.SignupData
 import dev.nasyxnadeem.parun.model.SignupResponse
 import retrofit2.Response
@@ -13,5 +15,8 @@ interface BackendAPI {
 
     @POST("auth/signup")
     suspend fun signupUser(@Body signupData: SignupData): Response<SignupResponse>
+
+    @POST("auth/signin")
+    suspend fun signinUser(@Body signinData: SigninData): Response<SigninResponse>
 
 }
