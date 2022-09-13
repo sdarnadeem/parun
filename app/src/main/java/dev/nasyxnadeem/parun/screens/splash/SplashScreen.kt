@@ -30,7 +30,7 @@ fun SplashScreen(navController: NavController) {
     // animate to red
     LaunchedEffect(true) {
         color.animateTo(Color.Magenta, animationSpec = tween(2000))
-        navController.navigate(ParunScreens.LoginScreen.name)
+        navController.navigate(ParunScreens.SignupScreen.name)
     }
 
     val primaryTextStyle = TextStyle(

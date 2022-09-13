@@ -28,23 +28,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import dev.nasyxnadeem.parun.R
 import dev.nasyxnadeem.parun.model.SignupData
+import dev.nasyxnadeem.parun.navigation.ParunScreens
 
 @OptIn(ExperimentalComposeUiApi::class)
-@Preview
 @Composable
-fun SignupScreen(navController: NavHostController? = null, viewModel: SignupViewModel = hiltViewModel()) {
+fun SignupScreen(navController: NavController, viewModel: SignupViewModel = hiltViewModel()) {
 
 
-    Column(modifier = Modifier.fillMaxSize().padding(top = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        var email by remember{ mutableStateOf("")}
-        var password by remember{mutableStateOf("")}
+    Column(
+        modifier = Modifier.fillMaxSize().padding(top = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        var email by remember { mutableStateOf("") }
+        var password by remember { mutableStateOf("") }
         var mobileNumber by remember { mutableStateOf("") }
-        var confirmPassword by remember {mutableStateOf("")}
+        var confirmPassword by remember { mutableStateOf("") }
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
-        val error: MutableState<String?> = rememberSaveable {mutableStateOf(null)}
+        val error: MutableState<String?> = rememberSaveable { mutableStateOf(null) }
 //        val loading = remember { mutableStateOf(false) }
 
 
@@ -53,22 +57,34 @@ fun SignupScreen(navController: NavHostController? = null, viewModel: SignupView
         Image(
             painter = painterResource(R.drawable.login),
             contentDescription = null,
-            modifier = Modifier.fillMaxHeight(0.2f).fillMaxWidth(), contentScale = ContentScale.FillWidth
+            modifier = Modifier.fillMaxHeight(0.2f).fillMaxWidth(),
+            contentScale = ContentScale.FillWidth
         )
 
-Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10.dp ), horizontalArrangement = Arrangement.Start) {
-    Text(text = "Signup", color = Color.Black, fontSize = 30.sp, fontWeight = FontWeight.Bold)
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(
+                text = "Signup",
+                color = Color.Black,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold
+            )
 
-}
+        }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Default.AlternateEmail, contentDescription = null, tint = Color.Blue)
             Spacer(modifier = Modifier.width(10.dp))
             TextField(
                 value = email,
                 label = { Text(text = "Email Address") },
-                onValueChange = {email = it},
+                onValueChange = { email = it },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                ),
             )
         }
 
@@ -78,9 +94,12 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
             TextField(
                 value = mobileNumber,
                 label = { Text(text = "Mobile Number") },
-                onValueChange = {mobileNumber = it},
+                onValueChange = { mobileNumber = it },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Phone,
+                    imeAction = ImeAction.Next
+                ),
             )
         }
 
@@ -90,7 +109,7 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
             TextField(
                 value = password,
                 label = { Text(text = "Password") },
-                onValueChange = {password = it},
+                onValueChange = { password = it },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
@@ -98,12 +117,15 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
                         Icons.Filled.VisibilityOff
                     else Icons.Filled.Visibility
 
-                    IconButton(onClick = {passwordVisible = !passwordVisible}) {
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(imageVector = image, contentDescription = null, tint = Color.Blue)
                     }
 
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next
+                ),
             )
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -112,9 +134,12 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
             TextField(
                 value = confirmPassword,
                 label = { Text(text = "Confirm Password") },
-                onValueChange = {confirmPassword = it},
+                onValueChange = { confirmPassword = it },
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done
+                ),
                 keyboardActions = KeyboardActions(onDone = {
                     keyboardController?.hide()
                     validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel)
@@ -125,15 +150,23 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
         Spacer(modifier = Modifier.height(10.dp))
 
         if (!error.value.isNullOrEmpty()) {
-            Row(modifier = Modifier.fillMaxWidth().padding(start = 70.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(start = 70.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
                 Text("*${error.value}", color = Color.Red)
             }
         }
 
         if (!viewModel.loading.value) {
-            Button(onClick = {
-                validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel)
-            }, modifier = Modifier.fillMaxWidth(0.7f).clip(shape = RoundedCornerShape(10.dp)), colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff0124fb))) {
+            Button(
+                onClick = {
+                    validateInputs(email, mobileNumber, password, confirmPassword, error, viewModel)
+                },
+                modifier = Modifier.fillMaxWidth(0.7f).clip(shape = RoundedCornerShape(10.dp)),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff0124fb))
+            ) {
                 Text("Continue", color = Color.LightGray)
             }
         } else {
@@ -144,7 +177,9 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
             modifier = Modifier.padding(top = 10.dp)
         ) {
             Text("Already have an account, ", style = MaterialTheme.typography.subtitle1)
-            TextButton(onClick = {}) {
+            TextButton(onClick = {
+                navController.navigate(ParunScreens.LoginScreen.name)
+            }) {
                 Text("Sign In", style = MaterialTheme.typography.subtitle1)
             }
         }
@@ -153,29 +188,43 @@ Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 10
 }
 
 
-fun validateInputs(email: String, mobileNumber: String, password: String, confirmPassword: String, error: MutableState<String?>, viewModel: SignupViewModel) {
-error.value = null
-if (email.isEmpty()) {
-error.value = "Please Enter an Email"
-} else if (mobileNumber.isEmpty()) {
-error.value = "Please Enter a mobile Number"
-} else if (password.isEmpty()) {
-error.value = "Please enter a password"
-} else if (password.length < 8) {
-error.value = "Please enter a password containing at least 8 characters"
-} else if (password != confirmPassword) {
-error.value = "Password and confirm password must be same"
-} else {
+fun validateInputs(
+    email: String,
+    mobileNumber: String,
+    password: String,
+    confirmPassword: String,
+    error: MutableState<String?>,
+    viewModel: SignupViewModel
+) {
+    error.value = null
+    if (email.isEmpty()) {
+        error.value = "Please Enter an Email"
+    } else if (mobileNumber.isEmpty()) {
+        error.value = "Please Enter a mobile Number"
+    } else if (password.isEmpty()) {
+        error.value = "Please enter a password"
+    } else if (password.length < 8) {
+        error.value = "Please enter a password containing at least 8 characters"
+    } else if (password != confirmPassword) {
+        error.value = "Password and confirm password must be same"
+    } else {
 
-            viewModel.signupUser(signupData = SignupData(email, mobileNumber, password, confirmPassword))
-            if (!viewModel.data.value?.message.toString().isNullOrEmpty()) {
-                error.value = viewModel.data.value?.message.toString()
-            }
-            if (!viewModel.exception.value.message.isNullOrEmpty()) {
-                error.value = viewModel.exception.value.message.toString()
-            }
-
+        viewModel.signupUser(
+            signupData = SignupData(
+                email,
+                mobileNumber,
+                password,
+                confirmPassword
+            )
+        )
+        if (!viewModel.data.value?.message.toString().isNullOrEmpty()) {
+            error.value = viewModel.data.value?.message.toString()
         }
+        if (!viewModel.exception.value.message.isNullOrEmpty()) {
+            error.value = viewModel.exception.value.message.toString()
+        }
+
+    }
 
 
 }
