@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 
 @Dao
-interface TokenDao {
+interface UserDao {
 
     @Query("SELECT * FROM token_tbl")
     fun getToken(): Flow<User>

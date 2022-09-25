@@ -1,9 +1,12 @@
 package dev.nasyxnadeem.parun.di
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dev.nasyxnadeem.parun.dao.UserDatabase
 import dev.nasyxnadeem.parun.network.BackendAPI
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -22,4 +25,14 @@ object AppModule {
             .build()
             .create(BackendAPI::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideUserDoa(userDatabase : UserDatabase) : userDatabase.userDao()
+
+    @Singleton
+    @Provides
+    fun provideAppDatabase(@ApplicationContext context: Context)
+
+
 }
